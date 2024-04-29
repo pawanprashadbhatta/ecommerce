@@ -1,4 +1,5 @@
 import {Table,Column, Model,DataType,  CreatedAt, PrimaryKey} from "sequelize-typescript"
+import { toDefaultValue } from "sequelize/types/utils";
 
 @Table({
     tableName:"users",
@@ -13,12 +14,18 @@ class User extends Model{
         defaultValue:DataType.UUIDV4
 
     })
-    declare id:String
+    declare id:string
     @Column({
        type:DataType.STRING
 
     })
     declare userName:string;
+    @Column({
+        type:DataType.ENUM('customer','admin'),
+        defaultValue:"customer"
+ 
+     })
+    declare role:string
     @Column({
         type:DataType.STRING
  

@@ -27,21 +27,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-require("./model/index");
+const dotenv = __importStar(require("dotenv"));
+require("./database/connection");
+const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
+const productRoute_1 = __importDefault(require("./routes/productRoute"));
+const adminseeder_1 = __importDefault(require("./services/adminseeder"));
+const categoryController_1 = __importDefault(require("./controllers/categoryController"));
 const app = (0, express_1.default)();
 const PORT = 3000;
 //env file import and config before use
-const dotenv = __importStar(require("dotenv"));
 dotenv.config();
+app.use(express_1.default.json());
+//admin seedding
+(0, adminseeder_1.default)();
+app.use('', userRoutes_1.default);
+app.use('', productRoute_1.default);
 app.get("/", (req, res) => {
     res.send("hello ts programmer");
 });
-app.get("/contactUs", (req, res) => {
-    res.send("hello ts programmer contact us");
-});
-app.get("/about", (req, res) => {
-    res.send("hello ts programmer about us");
-});
 app.listen(PORT, () => {
+    categoryController_1.default.seedCategory();
     console.log("server is started at port 3000 successfully");
 });
