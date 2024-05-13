@@ -7,7 +7,7 @@ import Category from "../database/models/categoryModel";
 class productController{
     
   async addProduct(req:AuthRequest,res:Response):Promise<void>{
-  
+    const userId = req.user?.id
     let fileName;
     if(req.file){
         fileName=req.file?.filename
@@ -28,8 +28,10 @@ class productController{
         productPrice,
         productTotalQty,
         productImageUrl:fileName,
-        categoryId
+        categoryId,
+         userId 
     })
+   
     res.status(200).json({
         message:"product created successfully.."
     })
@@ -54,6 +56,61 @@ res.status(200).json({
     data
 })
   }
+ async getSingleProduct(req:Request,res:Response):Promise<void>{
+    const {id}=req.params
+    const data=await Product.findAll({
+        where:{
+            id:id
+        },
+        include:[
+            {
+                model:Category,
+                attributes:["id","categoryName"]
+            },
+            {
+                model:User,
+                attributes:["id","userName","email"]
+            }
+        ]
+    })
+    if(data.length==0){
+        res.status(400).json({
+            message:"no product with that id"
+        })
+    }else{
+        res.status(200).json({
+            messgae:"single product fetched successfullly"
+            ,data
+        })
+    }
+ }
+
+async deleteProduct(req:Request,res:Response):Promise<void>{
+    const {id}=req.params
+    const data=await Product.findAll({
+        where:{
+            id:id
+        }
+    })
+    if(data.length>0){
+        await Product.destroy({
+            where:{
+                id:id
+            }
+            
+        })
+        res.status(200).json({
+            message:"product deleted successfully"
+        })
+           
+    }else{
+        res.status(400).json({
+            message:"no product with that id availabalae"
+        })
+    }
+  
+}
+
 
 }
 export default new productController()

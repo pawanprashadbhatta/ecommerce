@@ -5,4 +5,5 @@ import {multer,storage} from "../middleware/multerMiddleware"
 const upload=multer({storage:storage})
 const router:Router=Express.Router()
 router.route('/').post(authMiddleware.isAuthenticated,authMiddleware.restrictTo(Role.Admin),upload.single('image'),productController.addProduct).get(productController.getProduct)
+router.route("/:id").get(productController.getSingleProduct).delete(authMiddleware.isAuthenticated,authMiddleware.restrictTo(Role.Admin),productController.deleteProduct)
 export default router
