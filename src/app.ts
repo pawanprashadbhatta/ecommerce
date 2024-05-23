@@ -7,9 +7,17 @@ import adminSheeder from "./services/adminseeder"
 import categoryController from "./controllers/categoryController"
 import cartRoute from './routes/cartRoute'
 import categoryRoute from './routes/categoryRoute'
+import cors from 'cors'
 const app:Application=express()
 const PORT=3000
-//env file import and config before use
+
+
+
+app.use (cors ( {
+    origin: '*', // allow all
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // allowed HTTP methods
+    allowedHeaders: ['Content-Type', 'Authorization'] // allowed headers
+  } ));
 
 
 
